@@ -7,7 +7,7 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   has_secure_password
-  validates :password, presence: true, length: {minimum:6}
+  validates :password, presence: true, length: {minimum:6},allow_nil:true
 
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
@@ -23,7 +23,8 @@ class User < ApplicationRecord
 
   def remember
     self.remember_token=User.new_token
-    update_attribute(:remember:digest,User.digest(remember_token))
+    update_attribute(:remember_digest,User.digest(remember_token))
+  end
 
     # 渡されたトークンがダイジェストと一致したらtrueを返す
   def authenticated?(remember_token)
